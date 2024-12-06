@@ -1,0 +1,67 @@
+<!-- blog/templates/blog/post_list.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Блог</title>
+    <style>
+        .pagination {
+            margin-top: 20px;
+        }
+        .pagination a {
+            margin: 0 5px;
+            text-decoration: none;
+        }
+        .current {
+            font-weight: bold;
+        }
+        .per-page-selector {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Все посты</h1>
+    
+    <ul>
+        {% for post in page_obj %}
+            <li>
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.content }}</p>
+                <p><em>Создано: {{ post.created_at }}</em></p>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1&per_page={{ per_page }}">&laquo; Первая</a>
+                <a href="?page={{ page_obj.previous_page_number }}&per_page={{ per_page }}">Предыдущая</a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&per_page={{ per_page }}">Следующая</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&per_page={{ per_page }}">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
+    <div class="per-page-selector">
+        <form method="get" action="">
+            <label for="per_page">Постов на странице:</label>
+            <select name="per_page" id="per_page" onchange="this.form.submit()">
+                <option value="5" {% if per_page == 5 %}selected{% endif %}>5</option>
+                <option value="10" {% if per_page == 10 %}selected{% endif %}>10</option>
+                <option value="15" {% if per_page == 15 %}selected{% endif %}>15</option>
+                <option value="20" {% if per_page == 20 %}selected{% endif %}>20</option>
+            </select>
+        </form>
+    </div>
+</body>
+</html>
